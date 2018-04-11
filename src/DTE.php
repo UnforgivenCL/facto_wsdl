@@ -90,14 +90,18 @@ class DTE {
     const NOTA_DEBITO_EXPORTACION_ELECTRONICA = 111;
     const NOTA_CREDITO_EXPORTACION_ELECTRONICA = 112;
 
-    function __construct($tipo_dte = null, $options = array()) {
+    function __construct($tipo_dte = null, $options = array(), $date = null) {
         if ($tipo_dte == null) {
             $this->tipo_dte = DTE::FACTURA_ELECTRONICA_EXENTA;
         } else {
             $this->tipo_dte = $tipo_dte;
         }
-        $fecha_emision = date("Y-m-d");
-        $this->fecha_emision = $fecha_emision;
+        if (!isset($date)) {
+          $date = date("Y-m-d");
+        }
+
+        $this->fecha_emision = $date;
+      
         $this->client = new Server($options);
     }
 
@@ -170,8 +174,6 @@ class DTE {
                 $this->error = $this->resultado->resultado->mensaje_error;
                 return false;
             }
-
-
 
             return TRUE;
         } catch (Exception $exc) {
